@@ -45,6 +45,7 @@ function frameLoop() {
   videoHistogram.tick();
 
   if (pickedColor) {
+    console.log('found a picked color... color is ...', pickecColor);
     detect();
   }
 
@@ -84,10 +85,12 @@ function detector(options) {
       }
     }
     detected = {x: xSum / count, y: ySum /count};
+    console.log('detected value is ...', detected);
     var xVal = (detected.x - w / 2)/(w / 2);
     xPID.update(xVal);
 
     if (state === 'follow') {
+      console.log('in a follow state', xPID.pid().sum);
       client.right(-xPID.pid().sum);
     } else {
       client.stop();
@@ -313,4 +316,26 @@ flightButton.addEventListener('click', function() {
     });
     this.textContent = 'Start';
   }
+});
+
+var autonomous = document.getElementById('auto');
+auto.addEventListener('click', function() {
+  // let's do some common actionss
+
+  console.log('starting autonomous sequence');
+  client.takeoff();
+  client
+    .after(5000, function() {
+      this.clockwise(0.5);
+    });
+    .after(5000, function() {
+      this.stop();
+    })
+    .after(5000, function() {
+      this.clockwise(0.5);
+    })
+    .after(1000, function() {
+      this.stop();
+      this.land();
+    });
 });
