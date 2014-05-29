@@ -57,11 +57,14 @@ wsServer.on('connection', function(conn) {
         drone.takeoff();
         drone
           .after(1000, function() {
-            this.clockwise(0.5);
+            this.down(0.3);
           })
-          .after(3000, function() {
+          .after(1000, function() {
             this.stop();
-            this.land();
+            this.front(0.1);
+          })
+          .after(13000, function() {
+            this.stop();
           });
         break;
       default:
