@@ -7,6 +7,7 @@ var path = require('path');
 var frontendBuild = path.join(__dirname, '..', 'frontend', 'build');
 var ws = require('ws');
 var drone = require('ar-drone').createClient();
+var starfox = require('starfox');
 
 var server = http.createServer(function(req, res) {
   send(req, req.url, {root: frontendBuild}).pipe(res);
@@ -55,4 +56,36 @@ wsServer.on('connection', function(conn) {
     }
   });
 });
+
+starfox.mount(server);
+
+function handleGamepadInput(gamepad) {
+  // Axes
+  //console.log(gamepad.axes);
+  drone.right(gamepad.axes[0]); // Left/right
+  drone.back(gamepad.axes[1]); // Forward/back
+  drone.clockwise(gamepad.axes[2]); // Rotation
+  drone.down(gamepad.axes[3]); // Up/down
+  
+  // Buttons
+  //console.log(gamepad.buttons);
+  if (gamepad.buttons[0].pressed) {
+    drone.land();
+  }
+  
+  if (gamepad.buttons[2].pressed) {
+    drone.takeoff();
+  }
+}
+
+starfox.on('connection', function(player) {
+  player.on('input', function(gamepad) {
+    handleGamepadInput(gamepad);
+  });
+  
+  player.on('gamepadsChanged', function(gamepads) {
+    console.log('gamepads changed ' + gamepads);
+  });
+});
+
 server.listen(process.env.PORT || 3000);
