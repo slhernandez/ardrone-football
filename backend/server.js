@@ -68,13 +68,31 @@ function handleGamepadInput(gamepad) {
   drone.down(gamepad.axes[3]); // Up/down
   
   // Buttons
-  //console.log(gamepad.buttons);
-  if (gamepad.buttons[0].pressed) {
+  // console.log(gamepad.buttons);
+  if (gamepad.buttons[5].pressed) {
+    console.log('landing....');
     drone.land();
   }
   
-  if (gamepad.buttons[2].pressed) {
+  if (gamepad.buttons[9].pressed) {
+    console.log('taking off...');
     drone.takeoff();
+  }
+  
+  if (gamepad.buttons[0].pressed) {
+    drone.up(1);
+  } else if (gamepad.buttons[2].pressed) {
+    drone.down(1);
+  } else {
+    drone.back(0);
+  }
+  
+  if (gamepad.buttons[1].pressed) {
+    drone.clockwise(1);
+  } else if (gamepad.buttons[3].pressed) {
+    drone.counterClockwise(1);
+  } else {
+    drone.clockwise(0);
   }
 }
 
