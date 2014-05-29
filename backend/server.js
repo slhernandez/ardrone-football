@@ -57,11 +57,11 @@ wsServer.on('connection', function(conn) {
         mission.takeoff()
           .zero()
           .altitude(1)
-          .forward(2)
-          .right(2)
-          .backward(2)
-          .left(2)
-          .hover(1000)  // Hover in place for 1 second
+          .forward(1)
+          .right(1)
+          .backward(1)
+          .left(1)
+          .hover(500)  // Hover in place for 1 second
           .land();
         mission.run(function (err, result) {
           if (err) {
