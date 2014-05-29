@@ -8,7 +8,8 @@
     "send": "^0.3.0",
     "ws": "^0.4.31",
     "ar-drone": "^0.3.2",
-    "starfox": "^0.0.1"
+    "starfox": "^0.0.1",
+    "ardrone-autonomy": "0.1.2"
   },
   "devDependencies": {
     "jshint": "^2.5.0",
