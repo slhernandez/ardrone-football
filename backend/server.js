@@ -7,8 +7,8 @@ var path = require('path');
 var frontendBuild = path.join(__dirname, '..', 'frontend', 'build');
 var ws = require('ws');
 var starfox = require('starfox');
-var autonomy = require('ardrone-autonomy');
-var mission  = autonomy.createMission();
+//var autonomy = require('ardrone-autonomy');
+//var mission  = autonomy.createMission();
 var drone = require('ar-drone').createClient();
 
 var server = http.createServer(function(req, res) {
@@ -54,25 +54,15 @@ wsServer.on('connection', function(conn) {
         drone.stop();
         break;
       case 'autonomy':
-        mission.takeoff()
-          .zero()
-          .altitude(1)
-          .forward(1)
-          .right(1)
-          .backward(1)
-          .left(1)
-          .hover(500)  // Hover in place for 1 second
-          .land();
-        mission.run(function (err, result) {
-          if (err) {
-              console.trace("Oops, something bad happened: %s", err.message);
-              mission.client().stop();
-              mission.client().land();
-          } else {
-              console.log("Mission success!");
-              process.exit(0);
-          }
-        });
+        drone.takeoff();
+        drone
+          .after(1000, function() {
+            this.clockwise(0.5);
+          })
+          .after(3000, function() {
+            this.stop();
+            this.land();
+          });
         break;
       default:
         console.log('unknown msg: '+kind);
