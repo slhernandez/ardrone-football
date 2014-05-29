@@ -45,7 +45,7 @@ function frameLoop() {
   videoHistogram.tick();
 
   if (pickedColor) {
-    console.log('found a picked color... color is ...', pickecColor);
+    console.log('found a picked color... color is ...', pickedColor);
     detect();
   }
 
@@ -318,24 +318,10 @@ flightButton.addEventListener('click', function() {
   }
 });
 
-var autonomous = document.getElementById('auto');
+var auto = document.getElementById('auto');
 auto.addEventListener('click', function() {
   // let's do some common actionss
 
   console.log('starting autonomous sequence');
-  client.takeoff();
-  client
-    .after(5000, function() {
-      this.clockwise(0.5);
-    });
-    .after(5000, function() {
-      this.stop();
-    })
-    .after(5000, function() {
-      this.clockwise(0.5);
-    })
-    .after(1000, function() {
-      this.stop();
-      this.land();
-    });
+  client.autonomy();
 });

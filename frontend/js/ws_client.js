@@ -7,6 +7,7 @@ function WsClient() {
   this._queue = [];
   this._listeners = {};
   this._takeoffCbs = [];
+  this._autoCbs = [];
   this._landCbs = [];
   this._connect();
 }
@@ -48,6 +49,12 @@ WsClient.prototype._connect = function() {
             cb.apply(self, msg);
           });
           break;
+        case 'autonomy':
+          self._autoCbs.forEach(function(cb) {
+            cb();
+          });
+          self._autoCbs = [];
+          break;
         default:
           console.error('unknown message: '+kind);
       }
@@ -77,6 +84,14 @@ WsClient.prototype.takeoff = function(cb) {
   this._send(['takeoff']);
   if (cb) {
     this._takeoffCbs.push(cb);
+  }
+};
+
+WsClient.prototype.autonomy = function(cb) {
+  this._send(['autonomy']);
+  console.log('autonomy entered...');
+  if (cb) {
+    this._autoCbs.push(cb);
   }
 };
 
